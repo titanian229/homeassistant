@@ -6,7 +6,7 @@
       domain: zha
       platform: device
       type: remote_button_long_press
-      subtype: turn_on
+      subtype: dim_up
   condition: []
   action:
     - choose:
@@ -125,13 +125,54 @@
       type: remote_button_short_press
       subtype: right
       id: "right"
+    - device_id: 50ab492764ca791ff169d9a0c5c53c87
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: left
+      id: "long_left"
+    - device_id: 50ab492764ca791ff169d9a0c5c53c87
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: right
+      id: "long_right"
   condition: []
   action:
-    - service: tts.cloud_say
-      data:
-        entity_id: media_player.living_room_speaker
-        message: Speaker select button selected {{trigger.id}}
-  mode: single
+    - choose:
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: trigger
+                  id: "long_right"
+                - condition: trigger
+                  id: "long_left"
+          sequence:
+            - service: tts.cloud_say
+              data:
+                entity_id: media_player.living_room_speaker
+                message: Selected light number {{states.input_number.tradfri_controller_selected_light.state | int}}
+      default:
+        - service: input_number.set_value
+          target:
+            entity_id: input_number.tradfri_controller_selected_light
+          data:
+            value: >
+              {% if trigger.id == "left" %}
+                {% if states.input_number.tradfri_controller_selected_light.state | int > 1 %}
+                  {{((states.input_number.tradfri_controller_selected_light.state | int ) - 1 ) |float}}
+                {% else %}
+                  {{1.0 | float}}
+                {% endif %}
+              {% else %}
+                {% if states.input_number.tradfri_controller_selected_light.state | int < 5 %}
+                  {{((states.input_number.tradfri_controller_selected_light.state | int ) + 1) |float}}
+                {% else %}
+                  {{5.0 | float}}
+                {% endif %}
+              {% endif %}
+  mode: queued
+  max: 3
 - id: "tradfri_controller_center_click"
   alias: Tradfri Controller - Center Click
   description: "Selecting the center power button on the tradfri controller"
@@ -142,27 +183,80 @@
       type: remote_button_short_press
       subtype: turn_on
       id: "on"
-    - device_id: 50ab492764ca791ff169d9a0c5c53c87
-      domain: zha
-      platform: device
-      type: remote_button_long_press
-      subtype: turn_on
-      id: "long"
+    # - device_id: 50ab492764ca791ff169d9a0c5c53c87
+    #   domain: zha
+    #   platform: device
+    #   type: remote_button_long_press
+    #   subtype: turn_on
+    #   id: "long"
   condition: []
   action:
-    - service: script.turn_on_light
-      data:
-        variables:
-          light_entity: >
-            {% if input_number.tradfri_controller_selected_light == 1 %}
-              "light.lamp"
-            {% elif input_number.tradfri_controller_selected_light == 2 %}
-              "light.kitchen_lights"
-            {% elif input_number.tradfri_controller_selected_light == 3 %}
-              "light.hue_lamp"
-            {% else %}
-              "light.lamp"
-            {% endif %}
+    - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.tradfri_controller_selected_light
+              below: "4"
+          sequence:
+            - service: light.toggle
+              target:
+                entity_id: >
+                  {% if is_state("input_number.tradfri_controller_selected_light", "1.0") %}
+                    light.lamp
+                  {% elif is_state("input_number.tradfri_controller_selected_light", "2.0") %}
+                    light.kitchen_lights
+                  {% elif is_state("input_number.tradfri_controller_selected_light", "3.0") %}
+                    light.hue_lamp
+                  {% else %}
+                    light.lamp
+                  {% endif %}
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.tradfri_controller_selected_light
+              above: "3"
+              below: "5"
+          sequence:
+            - service: switch.toggle
+              target:
+                entity_id: switch.68075101840d8e9e9560
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.tradfri_controller_selected_light
+              above: "4"
+              below: "6"
+          sequence:
+            - service: switch.toggle
+              target:
+                entity_id: switch.2080834768c63ae47267
+      default:
+        - service: tts.cloud_say
+          data:
+            entity_id: media_player.living_room_speaker
+            message: Default called?
 
-      
-  mode: single
+    # data:
+    # color_temp: 380
+    # brightness_pct: 100
+    # - service: light.turn_on
+    # target:
+    #     entity_id:
+  mode:
+    single
+
+    # - service: light.toggle
+    #   target:
+    #     entity_id: >
+    #       {% if is_state("input_number.tradfri_controller_selected_light", 1) %}
+    #         light.lamp
+    #       {% elif is_state("input_number.tradfri_controller_selected_light", 2) %}
+    #         light.kitchen_lights
+    #       {% elif is_state("input_number.tradfri_controller_selected_light", 3) %}
+    #         light.hue_lamp
+    #       {% else %}
+    #         light.lamp
+    #       {% endif %}
+    # data:
+    # color_temp: 380
+    # brightness_pct: 100
+    # - service: light.turn_on
+    # target:
+    #     entity_id:
