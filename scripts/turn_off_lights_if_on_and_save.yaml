@@ -1,0 +1,15 @@
+turn_off_lights_if_on_and_save:
+  alias: Turn off lamp if on and save
+  sequence:
+    - condition: device
+      type: is_on
+      device_id: 1cd931d5a0dbf3afe6f996128e7a1b19
+      entity_id: light.lamp
+      domain: light
+    - service: light.turn_off
+      target:
+        entity_id: light.lamp
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.lamp_was_on
+  mode: single

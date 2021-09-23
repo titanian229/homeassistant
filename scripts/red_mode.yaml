@@ -1,0 +1,16 @@
+red_mode:
+  alias: Red mode
+  sequence:
+    - service: light.turn_on
+      target:
+        entity_id:
+          - light.kitchen_lights
+          - light.hue_lamp
+          - light.lamp
+      data:
+        rgb_color:
+          - 255
+          - 0
+          - 0
+        brightness_pct: 100
+  mode: single

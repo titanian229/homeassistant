@@ -1,0 +1,15 @@
+turn_off_kitchen_lights_if_on_and_save:
+  alias: Turn off kitchen lights if on and save
+  sequence:
+    - condition: device
+      type: is_on
+      device_id: e7ae40d0dbfb269f0371fd557a0bfc51
+      entity_id: light.kitchen_1
+      domain: light
+    - service: light.turn_off
+      target:
+        entity_id: light.kitchen_lights
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.kitchen_light_was_on
+  mode: single

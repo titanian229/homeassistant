@@ -1,0 +1,28 @@
+toggle_all_lights:
+  alias: Toggle all lights
+  sequence:
+    - choose:
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: light.lamp
+                  state: "on"
+                - condition: state
+                  entity_id: light.kitchen_1
+                  state: "on"
+          sequence:
+            - service: script.turn_off_all_lights
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: light.lamp
+                  state: "off"
+                - condition: state
+                  entity_id: light.kitchen_1
+                  state: "off"
+          sequence:
+            - service: script.turn_on_all_lights
+      default: []
+  mode: single

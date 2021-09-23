@@ -1,0 +1,41 @@
+night_mode:
+  alias: Night mode
+  sequence:
+    - service: light.turn_off
+      target:
+        entity_id:
+          - light.kitchen_lights
+          - light.lamp
+      data:
+        transition: 10
+    - type: turn_off
+      device_id: 1067e8b121d469a85fb5639290b767d8
+      entity_id: switch.2080834768c63ae47267
+      domain: switch
+    - type: turn_off
+      device_id: a4e8e524ec3660658d61b4060562a98d
+      entity_id: switch.68075101840d8e9e9560
+      domain: switch
+    - type: turn_off
+      device_id: dcc2e3d704d7c45643b19e9be11236f4
+      entity_id: switch.samsung_tv
+      domain: switch
+    - service: tts.cloud_say
+      data:
+        entity_id: media_player.living_room_speaker
+        message: Goodnight James
+    - service: light.turn_on
+      target:
+        entity_id: light.hue_lamp
+      data:
+        rgb_color:
+          - 255
+          - 0
+          - 0
+        brightness: 200
+    - service: light.turn_off
+      target:
+        entity_id: light.hue_lamp
+      data:
+        transition: 60
+  mode: single

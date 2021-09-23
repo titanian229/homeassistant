@@ -1,0 +1,16 @@
+alert_lights:
+  sequence:
+    - service: light.toggle
+      target:
+        entity_id:
+          - light.hue_lamp
+          - light.kitchen_lights
+          - light.lamp
+    - service: light.toggle
+      target:
+        entity_id:
+          - light.hue_lamp
+          - light.kitchen_lights
+          - light.lamp
+  mode: single
+  alias: Alert lights

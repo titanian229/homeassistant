@@ -55,7 +55,12 @@
       entity_id: person.james_lee
       zone: zone.home
   action:
-    - service: script.turn_on_kitchen_light
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light_entity: "light.kitchen_lights"
   mode: single
 - id: "1632010331665"
   alias: Routine - Evening Mode

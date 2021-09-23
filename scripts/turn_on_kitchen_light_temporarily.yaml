@@ -1,0 +1,13 @@
+turn_on_kitchen_light_temporarily:
+  sequence:
+    - service: script.turn_on_kitchen_light
+    - delay:
+        hours: 0
+        minutes: 5
+        seconds: 0
+        milliseconds: 0
+    - service: light.turn_off
+      target:
+        entity_id: light.kitchen_lights
+  mode: single
+  alias: temp kitchen light

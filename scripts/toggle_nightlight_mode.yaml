@@ -1,0 +1,24 @@
+toggle_nightlight_mode:
+  alias: Toggle nightlight mode
+  sequence:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.nightlight_on
+              state: "on"
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id:
+                  - light.hue_lamp
+                  - light.kitchen_lights
+                  - light.lamp
+            - service: input_boolean.turn_off
+              target:
+                entity_id: input_boolean.nightlight_on
+      default:
+        - service: script.nightlight_mode
+        - service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.nightlight_on
+  mode: single

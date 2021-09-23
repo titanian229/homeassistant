@@ -1,0 +1,11 @@
+turn_on_all_lights:
+  alias: Turn on all lights
+  sequence:
+    - service: script.turn_on_lamp
+    - service: script.turn_on_kitchen_light
+    - service: script.turn_on_hue_light
+    - type: turn_on
+      device_id: 1067e8b121d469a85fb5639290b767d8
+      entity_id: switch.2080834768c63ae47267
+      domain: switch
+  mode: single

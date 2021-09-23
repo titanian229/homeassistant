@@ -132,3 +132,37 @@
         entity_id: media_player.living_room_speaker
         message: Speaker select button selected {{trigger.id}}
   mode: single
+- id: "tradfri_controller_center_click"
+  alias: Tradfri Controller - Center Click
+  description: "Selecting the center power button on the tradfri controller"
+  trigger:
+    - device_id: 50ab492764ca791ff169d9a0c5c53c87
+      domain: zha
+      platform: device
+      type: remote_button_short_press
+      subtype: turn_on
+      id: "on"
+    - device_id: 50ab492764ca791ff169d9a0c5c53c87
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: turn_on
+      id: "long"
+  condition: []
+  action:
+    - service: script.turn_on_light
+      data:
+        variables:
+          light_entity: >
+            {% if input_number.tradfri_controller_selected_light == 1 %}
+              "light.lamp"
+            {% elif input_number.tradfri_controller_selected_light == 2 %}
+              "light.kitchen_lights"
+            {% elif input_number.tradfri_controller_selected_light == 3 %}
+              "light.hue_lamp"
+            {% else %}
+              "light.lamp"
+            {% endif %}
+
+      
+  mode: single

@@ -1,0 +1,13 @@
+blue_mode:
+  alias: Blue mode
+  sequence:
+    - service: light.turn_on
+      target:
+        entity_id:
+          - light.kitchen_lights
+          - light.hue_lamp
+          - light.lamp
+      data:
+        brightness: 255
+        color_name: blue
+  mode: single
