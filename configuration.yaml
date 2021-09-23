@@ -1,0 +1,97 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+# default_config:
+
+# Text to speech
+tts:
+  - platform: google_cloud
+    key_file: googlecloud.json
+    language: en-US
+    gender: female
+    voice: en-US-Wavenet-C
+    encoding: linear16
+    speed: 1.0
+    pitch: 0.0
+    gain: 0.0
+    text_type: ssml
+    profiles:
+      - telephony-class-application
+      - wearable-class-device
+
+cloud:
+  google_actions:
+    filter:
+      include_entities:
+        # - light.hue_lamp
+        # - light.lamp
+        # - light.kitchen_lights
+        - scene.lightsoff
+        - scene.lightson
+        # - switch.2080834768c63ae47267
+        # - switch.68075101840d8e9e9560
+        # - switch.samsung_tv
+        - script.blue_mode
+        - script.red_mode
+        - script.night_mode
+        - script.turn_on_kitchen_light_temporarily
+      # include_domains:
+      # - switch
+      # exclude_entities:
+      # - switch.outside
+    # entity_config:
+    #   switch.kitchen:
+    #     name: Custom Name for Google Assistant
+    #     aliases:
+    #      - bright lights
+    #      - entry lights
+    # room: living room
+
+group: !include groups.yaml
+# Automations in automations/ dir
+automation manual: !include_dir_merge_list automations/
+# Automations created in UI
+automation ui: !include automations.yaml
+
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+light:
+  - platform: group
+    name: Kitchen Lights
+    entities:
+      - light.kitchen_1
+      - light.kitchen_2
+  - platform: group
+    name: Bedroom Lights
+    entities:
+      - light.hue_lamp
+  - platform: group
+    name: Living Room Lights
+    entities:
+      - light.lamp
+# device_tracker:
+#   - platform: tplink_router
+#     host: 10.0.0.1
+#     username: admin
+#     password: !secret tplink_router_password
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_key
+
+sensor:
+  - platform: darksky
+    api_key: !secret darksky_key
+    monitored_conditions:
+      - summary
+      - temperature
+      - hourly_summary
+      - temperature_max
+
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: homeassistant
+  username: homeassistant
+  password: !secret influx_password
+  max_retries: 3
+  default_measurement: state

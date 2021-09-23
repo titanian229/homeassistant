@@ -1,0 +1,506 @@
+phone_unplugged:
+  alias: Phone Unplugged
+  sequence:
+  - service: tts.cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: Good morning
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.kitchen_lights
+      - light.lamp
+    data:
+      transition: 30
+      color_temp: 320
+      brightness_pct: 75
+  mode: single
+light_playground:
+  alias: Light Playground
+  sequence:
+  - service: light.turn_on
+    target:
+      entity_id: light.lamp
+    data:
+      brightness: 255
+      color_temp: 330
+  mode: single
+night_mode:
+  alias: Night mode
+  sequence:
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.kitchen_lights
+      - light.lamp
+    data:
+      transition: 10
+  - type: turn_off
+    device_id: 1067e8b121d469a85fb5639290b767d8
+    entity_id: switch.2080834768c63ae47267
+    domain: switch
+  - type: turn_off
+    device_id: a4e8e524ec3660658d61b4060562a98d
+    entity_id: switch.68075101840d8e9e9560
+    domain: switch
+  - type: turn_off
+    device_id: dcc2e3d704d7c45643b19e9be11236f4
+    entity_id: switch.samsung_tv
+    domain: switch
+  - service: tts.cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: Goodnight James
+  - service: light.turn_on
+    target:
+      entity_id: light.hue_lamp
+    data:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness: 200
+  - service: light.turn_off
+    target:
+      entity_id: light.hue_lamp
+    data:
+      transition: 60
+  mode: single
+blue_mode:
+  alias: Blue mode
+  sequence:
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.kitchen_lights
+      - light.hue_lamp
+      - light.lamp
+    data:
+      brightness: 255
+      color_name: blue
+  mode: single
+red_mode:
+  alias: Red mode
+  sequence:
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.kitchen_lights
+      - light.hue_lamp
+      - light.lamp
+    data:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness_pct: 100
+  mode: single
+alert_lights:
+  sequence:
+  - service: light.toggle
+    target:
+      entity_id:
+      - light.hue_lamp
+      - light.kitchen_lights
+      - light.lamp
+  - service: light.toggle
+    target:
+      entity_id:
+      - light.hue_lamp
+      - light.kitchen_lights
+      - light.lamp
+  mode: single
+  alias: Alert lights
+turn_off_lights_if_on_and_save:
+  alias: Turn off lamp if on and save
+  sequence:
+  - condition: device
+    type: is_on
+    device_id: 1cd931d5a0dbf3afe6f996128e7a1b19
+    entity_id: light.lamp
+    domain: light
+  - service: light.turn_off
+    target:
+      entity_id: light.lamp
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.lamp_was_on
+  mode: single
+turn_off_kitchen_lights_if_on_and_save:
+  alias: Turn off kitchen lights if on and save
+  sequence:
+  - condition: device
+    type: is_on
+    device_id: e7ae40d0dbfb269f0371fd557a0bfc51
+    entity_id: light.kitchen_1
+    domain: light
+  - service: light.turn_off
+    target:
+      entity_id: light.kitchen_lights
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.kitchen_light_was_on
+  mode: single
+turn_on_lamp_if_was_on:
+  alias: Turn on lamp if was on
+  sequence:
+  - condition: state
+    entity_id: input_boolean.lamp_was_on
+    state: 'true'
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.lamp_was_on
+  - service: light.turn_on
+    target:
+      entity_id: light.lamp
+  mode: single
+turn_on_kitchen_light_if_was_on:
+  alias: Turn on kitchen light if was on
+  sequence:
+  - condition: state
+    entity_id: input_boolean.kitchen_light_was_on
+    state: 'true'
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.kitchen_light_was_on
+  - service: light.turn_on
+    target:
+      entity_id: light.kitchen_lights
+  mode: single
+cast_lovelace:
+  alias: Cast Lovelace
+  sequence:
+  - service: cast.show_lovelace_view
+    data:
+      entity_id: media_player.living_room_tv
+      dashboard_path: lovelace
+      view_path: default_view
+  mode: single
+send_notification:
+  alias: Send Notification
+  sequence:
+  - service: notify.mobile_app_sm_a715w
+    data:
+      message: Notification!  You have been notified!
+  mode: single
+day_mode:
+  alias: Day mode
+  sequence:
+  - service: script.turn_on_kitchen_light
+  - service: script.turn_on_lamp
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.hue_lamp
+    data:
+      color_temp: 425
+      brightness: 130
+  - service: tts.google_cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: Good morning!  The time is {{ now().hour}}  {{ "%0.02d" | format(now().strftime("%-M")
+        | int) }}. It is {{ states('weather.home') }} and {{ state_attr('weather.home',
+        'temperature') }} degrees.
+  mode: single
+read_weather:
+  alias: Read weather
+  sequence:
+  - service: tts.google_cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: It is {{ states('weather.home') }} and {{ state_attr('weather.home',
+        'temperature') }} degrees
+  mode: single
+turn_on_kitchen_light:
+  alias: Turn on kitchen light
+  sequence:
+  - choose:
+    - conditions:
+      - condition: time
+        before: 09:00
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen_lights
+        data:
+          color_temp: 380
+          brightness_pct: 80
+    - conditions:
+      - condition: time
+        after: 09:00
+        before: '20:00'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen_lights
+        data:
+          color_temp: 300
+          brightness_pct: 100
+    - conditions:
+      - condition: time
+        after: '20:00'
+        before: '23:00'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen_lights
+        data:
+          color_temp: 360
+          brightness_pct: 100
+    default:
+    - service: light.turn_on
+      target:
+        entity_id: light.kitchen_lights
+      data:
+        color_temp: 320
+        brightness_pct: 100
+  mode: single
+turn_on_lamp:
+  alias: Turn on lamp
+  sequence:
+  - choose:
+    - conditions:
+      - condition: time
+        before: 09:00
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.lamp
+        data:
+          color_temp: 380
+          brightness_pct: 80
+    - conditions:
+      - condition: time
+        after: 09:00
+        before: '20:00'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.lamp
+        data:
+          color_temp: 300
+          brightness_pct: 100
+    - conditions:
+      - condition: time
+        after: '20:00'
+        before: '23:00'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.lamp
+        data:
+          color_temp: 360
+          brightness_pct: 100
+    default:
+    - service: light.turn_on
+      target:
+        entity_id: light.lamp
+      data:
+        color_temp: 320
+        brightness_pct: 100
+  mode: single
+turn_on_kitchen_light_temporarily:
+  sequence:
+  - service: script.turn_on_kitchen_light
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      entity_id: light.kitchen_lights
+  mode: single
+  alias: temp kitchen light
+nightlight_mode:
+  sequence:
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.hue_lamp
+      - light.lamp
+      - light.kitchen_lights
+    data:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness: 130
+  mode: single
+  alias: Nightlight mode
+play_audio_file:
+  alias: Play Positive Sound
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media_content_type: music
+      media_content_id: http://192.168.0.207:8123/local/audio/263126__pan14__tone-beep-lower-slower.wav
+  mode: single
+play_negative_sound:
+  alias: Play Negative Sound
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media_content_type: music
+      media_content_id: http://192.168.0.207:8123/local/audio/475347__fupicat__videogame-death-sound.wav
+  mode: single
+play_neutral_sound:
+  alias: Play Neutral Sound
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_speaker
+    data:
+      media_content_type: music
+      media_content_id: http://192.168.0.207:8123/local/audio/263126__pan14__tone-beep-lower-slower.wav
+  mode: single
+daily_report:
+  sequence:
+  - service: tts.google_cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: Good morning. It's currently {{states.sensor.dark_sky_summary.state}}
+        and {{states.sensor.dark_sky_temperature.state|round}} degrees in Melbourne.
+        Today will be {{states.sensor.dark_sky_hourly_summary.state|replace(".", "")}},
+        with a high of {{states.sensor.dark_sky_daily_high_temperature.state|round}}
+        degrees.
+  mode: single
+  alias: Daily Report
+turn_off_all_lights:
+  alias: Turn off all lights
+  sequence:
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.bedroom_lights
+      - light.kitchen_lights
+      - light.lamp
+  - type: turn_off
+    device_id: 1067e8b121d469a85fb5639290b767d8
+    entity_id: switch.2080834768c63ae47267
+    domain: switch
+  - type: turn_off
+    device_id: a4e8e524ec3660658d61b4060562a98d
+    entity_id: switch.68075101840d8e9e9560
+    domain: switch
+  mode: single
+turn_on_all_lights:
+  alias: Turn on all lights
+  sequence:
+  - service: script.turn_on_lamp
+  - service: script.turn_on_kitchen_light
+  - service: script.turn_on_hue_light
+  - type: turn_on
+    device_id: 1067e8b121d469a85fb5639290b767d8
+    entity_id: switch.2080834768c63ae47267
+    domain: switch
+  mode: single
+toggle_all_lights:
+  alias: Toggle all lights
+  sequence:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: light.lamp
+          state: 'on'
+        - condition: state
+          entity_id: light.kitchen_1
+          state: 'on'
+      sequence:
+      - service: script.turn_off_all_lights
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: light.lamp
+          state: 'off'
+        - condition: state
+          entity_id: light.kitchen_1
+          state: 'off'
+      sequence:
+      - service: script.turn_on_all_lights
+    default: []
+  mode: single
+toggle_nightlight_mode:
+  alias: Toggle nightlight mode
+  sequence:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.nightlight_on
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id:
+          - light.hue_lamp
+          - light.kitchen_lights
+          - light.lamp
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.nightlight_on
+    default:
+    - service: script.nightlight_mode
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.nightlight_on
+  mode: single
+turn_on_hue_light:
+  alias: Turn on hue light
+  sequence:
+  - choose:
+    - conditions:
+      - condition: time
+        before: 09:00
+      sequence:
+      - service: light.turn_on
+        data:
+          color_temp: 380
+          brightness_pct: 80
+        target:
+          entity_id: light.hue_lamp
+    - conditions:
+      - condition: time
+        after: 09:00
+        before: '20:00'
+      sequence:
+      - service: light.turn_on
+        data:
+          color_temp: 300
+          brightness_pct: 100
+        target:
+          entity_id: light.hue_lamp
+    - conditions:
+      - condition: time
+        after: '20:00'
+        before: '23:00'
+      sequence:
+      - service: light.turn_on
+        data:
+          color_temp: 360
+          brightness_pct: 100
+        target:
+          entity_id: light.hue_lamp
+    default:
+    - service: light.turn_on
+      data:
+        color_temp: 320
+        brightness_pct: 100
+      target:
+        entity_id: light.hue_lamp
+  mode: single
+light_increase_colour_temperature:
+  sequence:
+  - service: light.turn_on
+    target:
+      entity_id: light.hue_lamp
+    data:
+      color_temp: 159
+  mode: single
+  alias: Light increase colour temperature

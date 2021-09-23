@@ -1,0 +1,159 @@
+- id: '1631792495281'
+  name: Lights On
+  entities:
+    light.lamp:
+      color_mode: color_temp
+      brightness: 255
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 320
+      state: 'on'
+    light.hue_lamp:
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 320
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      state: 'on'
+    light.kitchen_1:
+      color_mode: color_temp
+      brightness: 255
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 320
+      state: 'on'
+    light.kitchen_2:
+      color_mode: color_temp
+      brightness: 255
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 320
+      state: 'on'
+    switch.2080834768c63ae47267:
+      friendly_name: LED Strip
+      state: 'on'
+- id: 'movie_mode_scene'
+  name: Movie Mode
+  entities:
+    light.lamp:
+      color_mode: color_temp
+      brightness: 50
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 320
+      state: 'on'
+    light.hue_lamp:
+      state: 'off'
+    light.kitchen_1:
+      state: 'off'
+    light.kitchen_2:
+      state: 'off'
+    # switch.2080834768c63ae47267:
+    #   friendly_name: LED Strip
+    #   state: 'off'
+- id: 'movie_paused_scene'
+  name: Movie Paused
+  entities:
+    light.lamp:
+      color_mode: color_temp
+      brightness: 175
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 320
+      state: 'on'
+    light.hue_lamp:
+      state: 'off'
+    light.kitchen_1:
+      state: 'off'
+    light.kitchen_2:
+      state: 'off'
+    switch.2080834768c63ae47267:
+      friendly_name: LED Strip
+      state: 'off'
+- id: '1631884219256'
+  name: Lights Off
+  entities:
+    light.lamp:
+      state: 'off'
+    light.hue_lamp:
+      state: 'off'
+    light.kitchen_1:
+      state: 'off'
+    light.kitchen_2:
+      state: 'off'
+    switch.2080834768c63ae47267:
+      state: 'off'
+    switch.68075101840d8e9e9560:
+      state: 'off'
+- id: '1631890301605'
+  name: BlueMode
+  entities:
+    light.lamp:
+      rgb_color: &blue [0,0,255]
+      brightness: 255
+      state: 'on'
+    light.hue_lamp:
+      brightness: 255
+      rgb_color: *blue
+      state: 'on'
+    light.kitchen_1:
+      rgb_color: *blue
+      brightness: 255
+      state: 'on'
+    light.kitchen_2:
+      rgb_color: *blue
+      brightness: 255
+      state: 'on'
+    switch.2080834768c63ae47267:
+      friendly_name: LED Strip
+      state: 'off'
+    switch.68075101840d8e9e9560:
+      friendly_name: Star Chain
+      state: 'off'
+- id: '1631890460326'
+  name: RedMode
+  entities:
+    light.lamp:
+      rgb_color: &red [255,0,0]
+      brightness: 255
+      state: 'on'
+    light.hue_lamp:
+      brightness: 255
+      rgb_color: *red
+      state: 'on'
+    light.kitchen_1:
+      rgb_color: *red
+      brightness: 255
+      state: 'on'
+    light.kitchen_2:
+      rgb_color: *red
+      brightness: 255
+      state: 'on'
+    switch.2080834768c63ae47267:
+      friendly_name: LED Strip
+      state: 'off'
+    switch.68075101840d8e9e9560:
+      friendly_name: Star Chain
+      state: 'off'
+- id: '1631934837401'
+  name: TestCn
+  entities:
+    light.lamp:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness: 255
+      state: 'on'

@@ -1,0 +1,18 @@
+
+*
+!*.yaml
+!.gitignore
+!*.md
+!automations/
+!scripts/
+
+# Ignore folders.
+.storage
+.cloud
+.google.token
+
+ip_bans.yaml
+secrets.yaml
+known_devices.yaml
+googlecloud.json
+ThePlan.md

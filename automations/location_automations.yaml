@@ -1,0 +1,54 @@
+- id: "1632010895510"
+  alias: Leaving Home
+  description: ""
+  trigger:
+    - platform: device
+      device_id: 2d9048a59424de5900db106d0a7eeccb
+      domain: device_tracker
+      entity_id: device_tracker.sm_a715w
+      type: leaves
+      zone: zone.home
+      id: phone_leaving_home
+  condition: []
+  action:
+    - service: script.turn_off_kitchen_lights_if_on_and_save
+    - type: turn_off
+      device_id: dcc2e3d704d7c45643b19e9be11236f4
+      entity_id: switch.samsung_tv
+      domain: switch
+    - type: turn_off
+      device_id: a4e8e524ec3660658d61b4060562a98d
+      entity_id: switch.68075101840d8e9e9560
+      domain: switch
+    - service: notify.mobile_app_sm_a715w
+      data:
+        message: Leaving home
+  mode: single
+- id: "1632011808079"
+  alias: Returning Home
+  description: ""
+  trigger:
+    - platform: device
+      device_id: 2d9048a59424de5900db106d0a7eeccb
+      domain: device_tracker
+      entity_id: device_tracker.sm_a715w
+      type: enters
+      id: phone_returning_home
+      zone: zone.home
+  condition: []
+  action:
+    - service: script.turn_on_kitchen_light_if_was_on
+    - service: notify.mobile_app_sm_a715w
+      data:
+        message: Welcome home!
+    - condition: sun
+      after: sunset
+    - service: light.turn_on
+      target:
+        entity_id:
+          - light.kitchen_lights
+          - light.lamp
+      data:
+        color_temp: 320
+        brightness_pct: 100
+  mode: single

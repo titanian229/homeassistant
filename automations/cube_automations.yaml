@@ -1,0 +1,120 @@
+- id: "1632270318984"
+  alias: "Cube: Dropped"
+  description: ""
+  trigger:
+    - device_id: f30d0b2e49bee93333a195bd879b6954
+      domain: zha
+      platform: device
+      type: device_dropped
+      subtype: turn_on
+  condition: []
+  action:
+    - service: script.toggle_all_lights
+  mode: single
+- id: "1632274859240"
+  alias: "Cube: Shake"
+  description: ""
+  trigger:
+    - device_id: f30d0b2e49bee93333a195bd879b6954
+      domain: zha
+      platform: device
+      type: device_shaken
+      subtype: turn_on
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.nightmode_run
+              state: "off"
+          sequence:
+            - service: script.toggle_all_lights
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.nightmode_run
+              state: "on"
+          sequence:
+            - service: script.toggle_nightlight_mode
+      default: []
+  mode: single
+- id: "1632276349729"
+  alias: "Cube: Tap 1"
+  description: ""
+  trigger:
+    - device_id: f30d0b2e49bee93333a195bd879b6954
+      domain: zha
+      platform: device
+      type: device_knocked
+      subtype: face_1
+  condition: []
+  action:
+    - service: light.toggle
+      target:
+        entity_id: light.lamp
+    - service: input_number.set_value
+      target:
+        entity_id: input_number.cube_face_selected
+      data:
+        value: 1
+  mode: single
+- id: "1632276595384"
+  alias: "Cube: Tap 2"
+  description: ""
+  trigger:
+    - device_id: f30d0b2e49bee93333a195bd879b6954
+      domain: zha
+      platform: device
+      type: device_knocked
+      subtype: face_2
+  condition: []
+  action:
+    - service: light.toggle
+      target:
+        entity_id: light.kitchen_lights
+    - service: input_number.set_value
+      target:
+        entity_id: input_number.cube_face_selected
+      data:
+        value: 2
+  mode: single
+- id: "1632276672417"
+  alias: "Cube: Tap 4"
+  description: ""
+  trigger:
+    - device_id: f30d0b2e49bee93333a195bd879b6954
+      domain: zha
+      platform: device
+      type: device_knocked
+      subtype: face_4
+  condition: []
+  action:
+    - type: toggle
+      device_id: 1067e8b121d469a85fb5639290b767d8
+      entity_id: switch.2080834768c63ae47267
+      domain: switch
+    - service: input_number.set_value
+      target:
+        entity_id: input_number.cube_face_selected
+      data:
+        value: 4
+  mode: single
+- id: "1632276981513"
+  alias: "Cube: Tap 3"
+  description: ""
+  trigger:
+    - device_id: f30d0b2e49bee93333a195bd879b6954
+      domain: zha
+      platform: device
+      type: device_knocked
+      subtype: face_3
+  condition: []
+  action:
+    - service: light.toggle
+      target:
+        entity_id: light.hue_lamp
+    - service: input_number.set_value
+      target:
+        entity_id: input_number.cube_face_selected
+      data:
+        value: 3
+  mode: single

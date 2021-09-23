@@ -1,0 +1,134 @@
+- id: "automation_tradfri_bedroom_long_press"
+  alias: "Tradfri - Bedroom Long Press"
+  description: ""
+  trigger:
+    - device_id: 2ff778a4db317904b52046b29aedb380
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: turn_on
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.nightmode_run
+              state: "off"
+          sequence:
+            - service: script.toggle_all_lights
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.nightmode_run
+              state: "on"
+          sequence:
+            - service: script.toggle_nightlight_mode
+      default: []
+  mode: single
+- id: "1632332603081"
+  alias: Tradfri - Kitchen Click
+  description: ""
+  trigger:
+    - device_id: 1b1b862e348fead81130779105f482c2
+      domain: zha
+      platform: device
+      type: remote_button_short_press
+      subtype: turn_on
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.kitchen_1
+              state: "on"
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id: light.kitchen_lights
+      default:
+        - service: script.turn_on_kitchen_light
+  mode: single
+- id: "1632333367870"
+  alias: Tradfri - Lamp Click
+  description: ""
+  trigger:
+    - device_id: adb0a9ccf4dc25c54c0f1e663db21a16
+      domain: zha
+      platform: device
+      type: remote_button_short_press
+      subtype: turn_on
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.lamp
+              state: "on"
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id: light.lamp
+      default:
+        - service: script.turn_on_lamp
+  mode: single
+- id: "1632333756268"
+  alias: Tradfri - Lamp Long Press
+  description: ""
+  trigger:
+    - device_id: adb0a9ccf4dc25c54c0f1e663db21a16
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: dim_up
+  condition: []
+  action:
+    - service: tts.cloud_say
+      data:
+        entity_id: media_player.living_room_speaker
+        message: Stub script for the long press activated, James todo
+  mode: single
+- id: "1632334441089"
+  alias: Tradfri - Bedroom Click
+  description: ""
+  trigger:
+    - device_id: 2ff778a4db317904b52046b29aedb380
+      domain: zha
+      platform: device
+      type: remote_button_short_press
+      subtype: turn_on
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.hue_lamp
+              state: "on"
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id: light.hue_lamp
+      default:
+        - service: script.turn_on_hue_light
+  mode: single
+- id: "1632343890979"
+  alias: Tradfri Controller - LeftAndRight
+  description: ""
+  trigger:
+    - device_id: 50ab492764ca791ff169d9a0c5c53c87
+      domain: zha
+      platform: device
+      type: remote_button_short_press
+      subtype: left
+      id: "left"
+    - device_id: 50ab492764ca791ff169d9a0c5c53c87
+      domain: zha
+      platform: device
+      type: remote_button_short_press
+      subtype: right
+      id: "right"
+  condition: []
+  action:
+    - service: tts.cloud_say
+      data:
+        entity_id: media_player.living_room_speaker
+        message: Speaker select button selected {{trigger.id}}
+  mode: single

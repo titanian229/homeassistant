@@ -1,0 +1,142 @@
+- id: "1631904425746"
+  alias: Routine - Lights in the morning
+  description: Turning on the lights at 7:30
+  trigger:
+    - platform: time
+      at: 07:30
+  condition:
+    - condition: zone
+      entity_id: person.james_lee
+      zone: zone.home
+  action:
+    - service: script.turn_on_lamp
+  mode: single
+- id: "1631906064084"
+  alias: Routine - Turn off TV and Lights
+  description: Setting things up for work starting when I am home
+  trigger:
+    - platform: time
+      at: 08:50
+    - platform: time
+      at: "12:55"
+  condition:
+    - condition: zone
+      entity_id: person.james_lee
+      zone: zone.home
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+  action:
+    - service: light.turn_off
+      target:
+        entity_id:
+          - light.hue_lamp
+          - light.kitchen_lights
+          - light.lamp
+    - service: switch.turn_off
+      target:
+        entity_id:
+          - switch.68075101840d8e9e9560
+          - switch.2080834768c63ae47267
+          - switch.samsung_tv
+  mode: single
+- id: "1631908283108"
+  alias: Routine - Lunchtime lights
+  description: Turning on the lights at noon
+  trigger:
+    - platform: time
+      at: "12:00"
+  condition:
+    - condition: zone
+      entity_id: person.james_lee
+      zone: zone.home
+  action:
+    - service: script.turn_on_kitchen_light
+  mode: single
+- id: "1632010331665"
+  alias: Routine - Evening Mode
+  description: Announce the time at 6 and go into evening mode
+  trigger:
+    - platform: time
+      at: "18:00"
+  condition:
+    - condition: zone
+      entity_id: person.james_lee
+      zone: zone.home
+  action:
+    - type: turn_on
+      device_id: 1067e8b121d469a85fb5639290b767d8
+      entity_id: switch.2080834768c63ae47267
+      domain: switch
+    - service: tts.google_cloud_say
+      data:
+        entity_id: media_player.living_room_speaker
+        message: The time is 6 pm
+  mode: single
+- id: "1632010491539"
+  alias: Routine - Evening Away
+  description: ""
+  trigger:
+    - platform: time
+      at: "18:00"
+  condition:
+    - condition: not
+      conditions:
+        - condition: zone
+          entity_id: person.james_lee
+          zone: zone.home
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.lamp
+      data:
+        color_temp: 320
+        brightness_pct: 100
+    - device_id: 2d9048a59424de5900db106d0a7eeccb
+      domain: mobile_app
+      type: notify
+      title: Don't forget to feed Juno!
+      message: Reminder
+  mode: single
+- id: "1632011932058"
+  alias: Routine - Bedtime
+  description: ""
+  trigger:
+    - platform: time
+      at: "22:00"
+  condition:
+    - condition: zone
+      entity_id: person.james_lee
+      zone: zone.home
+  action:
+    - service: tts.google_cloud_say
+      data:
+        entity_id: media_player.living_room_speaker
+        message: The time is 10 pm.
+    - service: light.turn_on
+      target:
+        entity_id: light.hue_lamp
+      data:
+        color_temp: 380
+        brightness_pct: 100
+    - type: turn_on
+      device_id: a4e8e524ec3660658d61b4060562a98d
+      entity_id: switch.68075101840d8e9e9560
+      domain: switch
+  mode: single
+- id: "1631910833054"
+  alias: Sunset
+  description: ""
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: -00:30:00
+  condition: []
+  action:
+    - service: script.turn_on_lamp
+    - service: script.turn_on_kitchen_light
+  mode: single
