@@ -190,8 +190,7 @@
   action:
     - service: notify.mobile_app_sm_a715w
       data:
-        message:
-          Good work!  You were at the gym for {{ (states('input_datetime.gym_start')|float
+        message: Good work!  You were at the gym for {{ (states('input_datetime.gym_start')|float
           - as_timestamp(now())|float)|round(1) }}
   mode: single
 - id: "1632094066066"
