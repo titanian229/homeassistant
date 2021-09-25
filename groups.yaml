@@ -1,0 +1,21 @@
+routine_automations:
+  name: Routine Automations
+  entities:
+    - automation.lights_in_the_morning
+    - automation.routine_bedtime
+    - automation.routine_evening_away
+    - automation.routine_evening_mode
+    - automation.sunset
+    - automation.routine_turn_off_tv_and_lights
+    - automation.work_starting
+    - automation.lunchtime_lights
+day_and_night_mode:
+  name: Day and night mode
+  entities:
+    - automation.ifttt_webhook
+    - automation.ifttt_webhook_day_mode
+tv_automations:
+  name: tv automations
+  entities:
+    - automation.tv_paused
+    - automation.tv_playing

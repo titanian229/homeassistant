@@ -17,6 +17,8 @@ tts:
       - telephony-class-application
       - wearable-class-device
 
+group: !include groups.yaml
+
 cloud:
   google_actions:
     filter:
@@ -34,6 +36,9 @@ cloud:
         - script.night_mode
         - script.turn_on_kitchen_light_temporarily
         - script.toggle_switch_mode
+        - group.routine_automations
+        - group.day_and_night_mode
+        - group.tv_automations
       # include_domains:
       # - switch
       # exclude_entities:
@@ -46,7 +51,6 @@ cloud:
     #      - entry lights
     # room: living room
 
-group: !include groups.yaml
 # Automations in automations/ dir
 automation manual: !include_dir_merge_list automations
 # Automations created in UI
