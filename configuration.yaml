@@ -33,6 +33,7 @@ cloud:
         - script.red_mode
         - script.night_mode
         - script.turn_on_kitchen_light_temporarily
+        - script.toggle_switch_mode
       # include_domains:
       # - switch
       # exclude_entities:
@@ -68,24 +69,25 @@ light:
     name: Living Room Lights
     entities:
       - light.lamp
+
 # device_tracker:
 #   - platform: tplink_router
 #     host: 10.0.0.1
 #     username: admin
 #     password: !secret tplink_router_password
 
-weather:
-  - platform: darksky
-    api_key: !secret darksky_key
+# weather:
+#   - platform: darksky
+#     api_key: !secret darksky_key
 
-sensor:
-  - platform: darksky
-    api_key: !secret darksky_key
-    monitored_conditions:
-      - summary
-      - temperature
-      - hourly_summary
-      - temperature_max
+# sensor:
+#   - platform: darksky
+#     api_key: !secret darksky_key
+#     monitored_conditions:
+#       - summary
+#       - temperature
+#       - hourly_summary
+#       - temperature_max
 
 influxdb:
   host: a0d7b954-influxdb
@@ -95,3 +97,25 @@ influxdb:
   password: !secret influx_password
   max_retries: 3
   default_measurement: state
+
+
+template:
+  - sensor:
+      - name: "lamp_colour_temp"
+        unit_of_measurement: "mireds"
+        state: >
+          {% if state_attr('light.lamp', 'color_temp') %}
+            {{ state_attr('light.lamp', 'color_temp') }}
+          {% else %}
+            0
+          {% endif %}
+  - sensor:
+      - name: "kitchen_colour_temp"
+        unit_of_measurement: "mireds"
+        state: >
+          {% if state_attr('light.kitchen_lights', 'color_temp') %}
+            {{ state_attr('light.kitchen_lights', 'color_temp') }}
+          {% else %}
+            0
+          {% endif %}
+          
