@@ -40,6 +40,45 @@
     switch.2080834768c63ae47267:
       friendly_name: LED Strip
       state: 'on'
+- id: 'morning_lights'
+  name: Morning Lights On
+  entities:
+    light.lamp:
+      color_mode: color_temp
+      brightness: 200
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 380
+      state: 'on'
+    light.hue_lamp:
+      color_mode: color_temp
+      brightness: 200
+      color_temp: 380
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      state: 'on'
+    light.kitchen_1:
+      color_mode: color_temp
+      brightness: 200
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 400
+      state: 'on'
+    light.kitchen_2:
+      color_mode: color_temp
+      brightness: 200
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      color_temp: 400
+      state: 'on'
 - id: 'movie_mode_scene'
   name: Movie Mode
   entities:
@@ -93,6 +132,47 @@
       state: 'off'
     light.kitchen_2:
       state: 'off'
+    switch.2080834768c63ae47267:
+      state: 'off'
+    switch.68075101840d8e9e9560:
+      state: 'off'
+    switch.samsung_tv:
+      state: 'off'
+- id: 'morning_scene'
+  name: Morning
+  entities:
+    light.hue_lamp:
+      state: 'on'
+      brightness: 200
+      color_temp: 360
+      rgb_color:
+      - 255
+      - 255
+      - 255
+    light.lamp:
+      state: 'on'
+      brightness: 180
+      color_temp: 360
+      rgb_color:
+      - 255
+      - 255
+      - 255
+    light.kitchen_1:
+      state: 'on'
+      brightness: 180
+      color_temp: 360
+      rgb_color:
+      - 255
+      - 255
+      - 255
+    light.kitchen_2:
+      state: 'on'
+      brightness: 180
+      color_temp: 360
+      rgb_color:
+      - 255
+      - 255
+      - 255
     switch.2080834768c63ae47267:
       state: 'off'
     switch.68075101840d8e9e9560:

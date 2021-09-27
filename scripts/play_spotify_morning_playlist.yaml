@@ -1,0 +1,28 @@
+play_spotify_morning_playlist:
+  alias: Play Spotify Playlist
+  sequence:
+    # # - service: media_player.select_source
+    # #   target:
+    # #     entity_id: media_player.living_room_speaker
+    # #   data:
+    # #     # entity_id: media_player.living_room_speaker
+    # #     source: spotify_source
+    - type: turn_on
+      device_id: dcc2e3d704d7c45643b19e9be11236f4
+      entity_id: switch.samsung_tv
+      domain: switch
+    - service: media_player.turn_on
+      target:
+        entity_id: media_player.living_room_tv
+    # - service: media_player.volume_set
+    #   target:
+    #     entity_id: media_player.living_room_tv
+    #   data:
+    #     volume_level: "0.50"
+    - service: media_player.play_media
+      target:
+        entity_id: media_player.spotify_refractedeyes_2
+      data:
+        media_content_type: playlist
+        media_content_id: "https://open.spotify.com/playlist/0FM34jLrzkjriHEqDiBN8J?si=9211b8c2f1b043af"
+  mode: single

@@ -1,235 +1,250 @@
-- id: "1631941515496"
+- id: '1631941515496'
   alias: Speak
-  description: ""
+  description: ''
   trigger:
-    - platform: sun
-      event: sunset
+  - platform: sun
+    event: sunset
   condition: []
   action:
-    - service: tts.google_cloud_say
-      data:
-        entity_id: media_player.living_room_speaker
-        message: the sun is setting
+  - service: tts.google_cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: the sun is setting
   mode: single
-- id: "1631946467725"
+- id: '1631946467725'
   alias: PlaySound
-  description: ""
+  description: ''
   trigger:
-    - platform: sun
-      event: sunrise
+  - platform: sun
+    event: sunrise
   condition: []
   action:
-    - service: media_player.play_media
-      data:
-        media_content_id: /home/pi/local/audio/263126__pan14__tone-beep-lower-slower.wav
-        media_content_type: music
-      target:
-        device_id:
-          - 067b7972bfdb544b465273e5a3299cc0
+  - service: media_player.play_media
+    data:
+      media_content_id: /home/pi/local/audio/263126__pan14__tone-beep-lower-slower.wav
+      media_content_type: music
+    target:
+      device_id:
+      - 067b7972bfdb544b465273e5a3299cc0
   mode: single
-- id: "1632013190704"
+- id: '1632013190704'
   alias: Phone battery low away
-  description: ""
+  description: ''
   trigger:
-    - type: battery_level
-      platform: device
-      device_id: 2d9048a59424de5900db106d0a7eeccb
-      entity_id: sensor.sm_a715w_battery_level
-      domain: sensor
-      below: 15
+  - type: battery_level
+    platform: device
+    device_id: 2d9048a59424de5900db106d0a7eeccb
+    entity_id: sensor.sm_a715w_battery_level
+    domain: sensor
+    below: 15
   condition:
-    - condition: not
-      conditions:
-        - condition: zone
-          entity_id: person.james_lee
-          zone: zone.home
-  action:
-    - device_id: 2d9048a59424de5900db106d0a7eeccb
-      domain: mobile_app
-      type: notify
-      title: Warning
-      message: Phone battery low!
-  mode: single
-- id: "1632013370310"
-  alias: Phone battery low home
-  description: ""
-  trigger:
-    - type: battery_level
-      platform: device
-      device_id: 2d9048a59424de5900db106d0a7eeccb
-      entity_id: sensor.sm_a715w_battery_level
-      domain: sensor
-      below: 10
-  condition:
+  - condition: not
+    conditions:
     - condition: zone
       entity_id: person.james_lee
       zone: zone.home
   action:
-    - service: tts.google_cloud_say
-      data:
-        entity_id: media_player.living_room_speaker
-        message: Phone battery is low
+  - device_id: 2d9048a59424de5900db106d0a7eeccb
+    domain: mobile_app
+    type: notify
+    title: Warning
+    message: Phone battery low!
   mode: single
-- id: "1632015613905"
+- id: '1632013370310'
+  alias: Phone battery low home
+  description: ''
+  trigger:
+  - type: battery_level
+    platform: device
+    device_id: 2d9048a59424de5900db106d0a7eeccb
+    entity_id: sensor.sm_a715w_battery_level
+    domain: sensor
+    below: 10
+  condition:
+  - condition: zone
+    entity_id: person.james_lee
+    zone: zone.home
+  action:
+  - service: tts.google_cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: Phone battery is low
+  mode: single
+- id: '1632015613905'
   alias: IFTTT Webhook Night Mode
-  description: ""
+  description: ''
   trigger:
-    - platform: event
-      event_type: ifttt_webhook_received
-      event_data:
-        script: bedtime
+  - platform: event
+    event_type: ifttt_webhook_received
+    event_data:
+      script: bedtime
   condition:
-    - condition: or
-      conditions:
-        - condition: time
-          after: "22:00"
-        - condition: time
-          before: 04:00
-    - condition: state
-      entity_id: input_boolean.nightmode_run
-      state: "off"
-  action:
-    - service: script.night_mode
-    - service: input_boolean.turn_on
-      target:
-        entity_id: input_boolean.nightmode_run
-  mode: single
-- id: "1632018845262"
-  alias: IFTTT Webhook Day Mode
-  description: ""
-  trigger:
-    - platform: event
-      event_type: ifttt_webhook_received
-      event_data:
-        script: daymode
-  condition:
+  - condition: or
+    conditions:
     - condition: time
-      before: "14:00"
-    - condition: state
-      entity_id: input_boolean.nightmode_run
-      state: "on"
+      after: '22:00'
+    - condition: time
+      before: 04:00
+  - condition: state
+    entity_id: input_boolean.nightmode_run
+    state: 'off'
   action:
-    - service: script.day_mode
-    - service: input_boolean.turn_off
-      target:
-        entity_id: input_boolean.nightmode_run
+  - service: script.night_mode
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.nightmode_run
   mode: single
-- id: "1632024621068"
+- id: '1632018845262'
+  alias: IFTTT Webhook Day Mode
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ifttt_webhook_received
+    event_data:
+      script: daymode
+  condition:
+  - condition: time
+    before: '14:00'
+  - condition: state
+    entity_id: input_boolean.nightmode_run
+    state: 'on'
+  action:
+  - service: script.day_mode
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.nightmode_run
+  mode: single
+- id: '1632024621068'
   alias: TV Playing
   description: Turns off and dims lights when the TV is playing
   trigger:
-    - platform: state
-      entity_id: media_player.living_room_tv
-      to: playing
+  - platform: state
+    entity_id: media_player.living_room_tv
+    to: playing
   condition:
-    - condition: not
-      conditions:
-        - condition: state
-          entity_id: media_player.living_room_tv
-          attribute: app_name
-          state: Spotify
-    - condition: sun
-      after: sunset
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: media_player.living_room_tv
+      attribute: app_name
+      state: Spotify
+  - condition: sun
+    after: sunset
   action:
-    - choose:
-        - conditions:
-            - condition: device
-              type: is_on
-              device_id: 1cd931d5a0dbf3afe6f996128e7a1b19
-              entity_id: light.lamp
-              domain: light
-          sequence:
-            - scene: scene.movie_mode
-      default: []
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: 1cd931d5a0dbf3afe6f996128e7a1b19
+        entity_id: light.lamp
+        domain: light
+      sequence:
+      - scene: scene.movie_mode
+    default: []
   mode: single
-- id: "1632029317217"
+- id: '1632029317217'
   alias: Cast to Google Hub
-  description: ""
+  description: ''
   use_blueprint:
     path: kind3r/cast-and-re-cast-a-lovelace-view-to-a-google-hub.yaml
     input:
       dashboard: lovelace
       player: media_player.living_room_tv
       view: default_view
-- id: "1632062348613"
+- id: '1632062348613'
   alias: TV Paused
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: media_player.living_room_tv
-      from: playing
+  - platform: state
+    entity_id: media_player.living_room_tv
+    from: playing
   condition:
-    - condition: sun
-      after: sunset
+  - condition: sun
+    after: sunset
   action:
-    - service: script.turn_on_lamp
+  - service: script.turn_on_lamp
   mode: single
-- id: "1632077583942"
+- id: '1632077583942'
   alias: Gym Tracker
-  description: ""
+  description: ''
   trigger:
-    - platform: zone
-      entity_id: person.james_lee
-      zone: zone.gym
-      event: enter
+  - platform: zone
+    entity_id: person.james_lee
+    zone: zone.gym
+    event: enter
   condition: []
   action:
-    - service: notify.mobile_app_sm_a715w
-      data:
-        message: You're doing great.  Gym visit started at {{ now() }}
+  - service: notify.mobile_app_sm_a715w
+    data:
+      message: You're doing great.  Gym visit started at {{ now() }}
   mode: single
-- id: "1632077692236"
+- id: '1632077692236'
   alias: Gym Tracker Leaving
-  description: ""
+  description: ''
   trigger:
-    - platform: zone
-      entity_id: person.james_lee
-      zone: zone.gym
-      event: leave
+  - platform: zone
+    entity_id: person.james_lee
+    zone: zone.gym
+    event: leave
   condition: []
   action:
-    - service: notify.mobile_app_sm_a715w
-      data:
-        message: Good work!  You were at the gym for {{ (states('input_datetime.gym_start')|float
-          - as_timestamp(now())|float)|round(1) }}
+  - service: notify.mobile_app_sm_a715w
+    data:
+      message: Good work!  You were at the gym for {{ (states('input_datetime.gym_start')|float
+        - as_timestamp(now())|float)|round(1) }}
   mode: single
-- id: "1632094066066"
+- id: '1632094066066'
   alias: Backup
-  description: ""
+  description: ''
   trigger:
-    - platform: time
-      at: "23:00"
+  - platform: time
+    at: '23:00'
   condition: []
   action:
-    - service: hassio.backup_full
+  - service: hassio.backup_full
   mode: single
-- id: "1632139145409"
+- id: '1632139145409'
   alias: SleepAsAndroid Bedtime
-  description: ""
+  description: ''
   trigger:
-    - platform: state
-      entity_id: input_boolean.saa_bedtime
-      from: "off"
-      to: "on"
+  - platform: state
+    entity_id: input_boolean.saa_bedtime
+    from: 'off'
+    to: 'on'
   condition: []
   action:
-    - choose:
-        - conditions:
-            - condition: device
-              type: is_on
-              device_id: 1cd931d5a0dbf3afe6f996128e7a1b19
-              entity_id: light.lamp
-              domain: light
-          sequence:
-            - service: light.turn_on
-              target:
-                entity_id: light.lamp
-              data:
-                color_temp: 420
-                brightness: 240
-      default: []
-    - service: tts.cloud_say
-      data:
-        entity_id: media_player.living_room_speaker
-        message: Bedtime is approaching
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: 1cd931d5a0dbf3afe6f996128e7a1b19
+        entity_id: light.lamp
+        domain: light
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.lamp
+        data:
+          color_temp: 420
+          brightness: 240
+    default: []
+  - service: tts.cloud_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: Bedtime is approaching
+  mode: single
+- id: '1632587356666'
+  alias: Test Spotify
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.spotify_refractedeyes_2
+    data:
+      media_content_type: playlist
+      media_content_id: Liked Songs
   mode: single

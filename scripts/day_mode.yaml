@@ -1,20 +1,29 @@
 day_mode:
   alias: Day mode
   sequence:
-    - service: script.turn_on_kitchen_light
-    - service: script.turn_on_lamp
-    - service: light.turn_on
-      target:
-        entity_id:
-          - light.hue_lamp
-      data:
-        color_temp: 425
-        brightness: 130
+    # - service: script.turn_on_kitchen_light
+    # - service: script.turn_on_lamp
+    # - service: light.turn_on
+    #   target:
+    #     entity_id:
+    #       - light.hue_lamp
+    #   data:
+    #     color_temp: 425
+    #     brightness: 130
+    - scene: scene.morning_lights_on
     - service: tts.cloud_say
       data:
         entity_id: media_player.living_room_speaker
         message: >
-          Good morning James!  The time is {{ now().hour}}  {{ "%0.02d" | format(now().strftime("%-M")
+          Good morning James!  It is 
+          {{ as_timestamp(now()) | timestamp_custom('%A')}}, {% set day = (as_timestamp(now()) | timestamp_custom('%d')) |int-%}
+          {{day}}{%- if day >= 4 and day <= 20 or day >= 24 and day <= 30 -%}th
+          {%- elif day == 1 or day == 21 or day == 31-%}st
+          {%- elif day == 2 or day == 22 -%}nd
+          {%- elif day == 3 or day == 23 -%}rd
+          {%- endif %} {{as_timestamp(now()) | timestamp_custom('%B')}}
+          
+          The time is {{ now().hour}}  {{ "%0.02d" | format(now().strftime("%-M")
            | int) }}. It is {{ states('weather.home') }} and {{ state_attr('weather.home',
            'temperature') }} degrees.
           {{[
@@ -34,6 +43,8 @@ day_mode:
               "Have a good weekend. "
             ] | random}}
           {% endif %}
-
+    - service: script.turn_on
+      target:
+        entity_id: script.play_spotify_morning_playlist
   mode: single
   # Add moon phase, reminders about day

@@ -1,16 +1,16 @@
-- id: "1631904425746"
-  alias: Routine - Lights in the morning
-  description: Turning on the lights at 7:30
-  trigger:
-    - platform: time
-      at: 07:30
-  condition:
-    - condition: zone
-      entity_id: person.james_lee
-      zone: zone.home
-  action:
-    - service: script.turn_on_lamp
-  mode: single
+# - id: "1631904425746"
+#   alias: Routine - Lights in the morning
+#   description: Turning on the lights at 7:30
+#   trigger:
+#     - platform: time
+#       at: 07:30
+#   condition:
+#     - condition: zone
+#       entity_id: person.james_lee
+#       zone: zone.home
+#   action:
+#     - service: script.turn_on_lamp
+#   mode: single
 - id: "1631906064084"
   alias: Routine - Turn off TV and Lights
   description: Setting things up for work starting when I am home
@@ -31,18 +31,19 @@
         - thu
         - fri
   action:
-    - service: light.turn_off
-      target:
-        entity_id:
-          - light.hue_lamp
-          - light.kitchen_lights
-          - light.lamp
-    - service: switch.turn_off
-      target:
-        entity_id:
-          - switch.68075101840d8e9e9560
-          - switch.2080834768c63ae47267
-          - switch.samsung_tv
+    - scene: scene.lightsoff
+    # - service: light.turn_off
+    #   target:
+    #     entity_id:
+    #       - light.hue_lamp
+    #       - light.kitchen_lights
+    #       - light.lamp
+    # - service: switch.turn_off
+    #   target:
+    #     entity_id:
+    #       - switch.68075101840d8e9e9560
+    #       - switch.2080834768c63ae47267
+    #       - switch.samsung_tv
   mode: single
 - id: "1631908283108"
   alias: Routine - Lunchtime lights

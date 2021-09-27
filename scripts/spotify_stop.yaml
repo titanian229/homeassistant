@@ -1,0 +1,7 @@
+spotify_stop:
+  alias: Stop Spotify
+  sequence:
+    - service: media_player.turn_off
+      target:
+        entity_id: media_player.spotify_refractedeyes_2
+  mode: single

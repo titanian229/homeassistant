@@ -34,6 +34,7 @@ cloud:
         - script.blue_mode
         - script.red_mode
         - script.night_mode
+        - script.day_mode
         - script.turn_on_kitchen_light_temporarily
         - script.toggle_switch_mode
         - group.routine_automations
@@ -101,7 +102,19 @@ influxdb:
   password: !secret influx_password
   max_retries: 3
   default_measurement: state
+  include:
+    entities:
+      - sensor.kitchen_colour_temp
+      - sensor.lamp_colour_temp
 
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
+google:
+  client_id: !secret google_cal_client_id
+  client_secret: !secret google_cal_client_secret
+  calendar_access: read_only
 
 template:
   - sensor:
@@ -122,4 +135,3 @@ template:
           {% else %}
             0
           {% endif %}
-          

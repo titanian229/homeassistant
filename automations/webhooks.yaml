@@ -1,0 +1,43 @@
+- id: "saa_webhook_automation"
+  alias: "SAA Webhook"
+  description: "Fires events based on starting and stopping sleep tracking and Sleep as Android alarm"
+  trigger:
+    - platform: webhook
+      webhook_id: sleep_as_android
+  condition:
+    - condition: zone
+      entity_id: person.james_lee
+      zone: zone.home
+  action:
+    - choose:
+        - conditions:
+            - '{{trigger.json.event == "sleep_tracking_started"}}'
+            # - '{{trigger.json.event == "alarm_alert_start"}}'
+            # - '{{trigger.json.event == "alarm_alert_dismissed"}}'
+          sequence:
+            - scene: scene.lightsoff
+            # - service: switch.turn_off
+            #   target:
+            #     entity_id:
+            #       - switch.samsung_tv
+        # - conditions:
+        #     - '{{trigger.json.event == "sleep_tracking_stopped"}}'
+        #     - condition: time
+        #       after: '05:30'
+        #   sequence:
+        #     - scene: scene.morning
+        - conditions:
+            - '{{trigger.json.event == "alarm_alert_dismissed"}}'
+            - condition: time
+              after: "05:30"
+          sequence:
+            - scene: scene.morning
+        - conditions:
+            - '{{trigger.json.event == "time_to_bed_alarm_alert"}}'
+          sequence:
+            - service: tts.cloud_say
+              data:
+                entity_id: media_player.living_room_speaker
+                message: Bedtime is soon {{trigger.json}}
+      default: []
+  mode: single
