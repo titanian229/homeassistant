@@ -1,8 +1,18 @@
-- id: "automation_tradfri_bedroom_long_press"
-  alias: "Tradfri - Bedroom Long Press"
-  description: ""
+- id: "all_switches_long_press"
+  alias: "Tradfri - All Switches Long Press"
+  description: "Any switch long press toggling all lights"
   trigger:
     - device_id: 2ff778a4db317904b52046b29aedb380
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: dim_up
+    - device_id: 1b1b862e348fead81130779105f482c2
+      domain: zha
+      platform: device
+      type: remote_button_long_press
+      subtype: dim_up
+    - device_id: adb0a9ccf4dc25c54c0f1e663db21a16
       domain: zha
       platform: device
       type: remote_button_long_press
@@ -69,32 +79,6 @@
                 entity_id: light.lamp
       default:
         - service: script.turn_on_lamp
-  mode: single
-- id: "1632333756268"
-  alias: Tradfri - Lamp Long Press
-  description: ""
-  trigger:
-    - device_id: adb0a9ccf4dc25c54c0f1e663db21a16
-      domain: zha
-      platform: device
-      type: remote_button_long_press
-      subtype: dim_up
-  condition: []
-  action:
-    - choose:
-        - conditions:
-            - condition: state
-              entity_id: input_boolean.nightmode_run
-              state: "off"
-          sequence:
-            - service: script.toggle_all_lights
-        - conditions:
-            - condition: state
-              entity_id: input_boolean.nightmode_run
-              state: "on"
-          sequence:
-            - service: script.toggle_nightlight_mode
-      default: []
   mode: single
 - id: "1632334441089"
   alias: Tradfri - Bedroom Click
